@@ -1,8 +1,7 @@
 import { Injectable } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
-import { Guid } from "guid-typescript";
 import { Model } from "mongoose";
-import { IUser, User } from "src/domain/entities";
+import { User } from "src/domain/entities";
 import { UserDocument } from "src/schemas";
 import { IUserRepository } from "../interfaces";
 import { Repository } from "./repository";
@@ -22,8 +21,8 @@ export class UserRepository extends Repository<User> implements IUserRepository 
         return new User();
     };
 
-    findByUserName = async (userName: string) => {
+    findByUserNameAsync = async (userName: string) => {
         let user = { UserName: userName }
-        return await this.userModel.findOne(user);
+        return await this.userModel.findOne(user).exec();
     };
 }

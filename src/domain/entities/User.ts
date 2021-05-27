@@ -13,7 +13,7 @@ export interface IUser {
     FirstName?: string,
     LastName?: string,
     Birthday?: Date,
-    SignUp: (userName: string, password: string) => void;
+    signup: (id: string, userName: string, password: string) => void;
 }
 
 @Schema()
@@ -50,13 +50,7 @@ export class User extends AggregateRoot implements IUser {
     @IsDate()
     Birthday?: Date;
 
-    SignUp = (userName: string, password: string) => {
-        if (!userName)
-            throw new exception("username can't be null.");
-        if (!password)
-            throw new exception("password can't be null.");
-        let id = Guid.create().toString();
-        let hashPassword = Md5.init(password);
-        this.apply(new UserSignUpEvent(id, userName, hashPassword));
+    signup = (id: string, userName: string, password: string) => {
+        this.apply(new UserSignUpEvent(id, userName, password));
     };
 }

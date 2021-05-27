@@ -1,1 +1,1 @@
-export * from './user.signup.handler'
+export * from './user.signup.command.handler'

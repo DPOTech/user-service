@@ -8,7 +8,6 @@ export class AppController {
 
   @Get()
   getHello(): string {
-    this.commandBus.execute(new UserSignUpCommand("username", "password"));
     return this.appService.getHello();
   }
 }

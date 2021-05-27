@@ -4,5 +4,5 @@ import { IRepository } from "./repository.interface";
 export interface IUserRepository extends IRepository<User> {
     signup: (entity: User) => Promise<User>;
     signin: (entity: User) => User;
-    findByUserName: (userName: string) => User;
+    findByUserNameAsync: (userName: string) => Promise<User>;
 }
