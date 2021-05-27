@@ -15,5 +15,6 @@ export class UserSignUpHandler implements ICommandHandler<UserSignUpCommand>{
         const exitedUser = this.publisher.mergeObjectContext(
             await this.service.findByUserName('administrator'),
         );
+        
     }
 }
