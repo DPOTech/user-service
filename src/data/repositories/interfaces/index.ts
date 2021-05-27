@@ -1,2 +1,2 @@
-export * from './IRepository'
-export * from './IUserRepository'
+export * from './repository.interface'
+export * from './user.repository.interface'

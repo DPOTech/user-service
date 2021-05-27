@@ -1,5 +1,5 @@
 import { User } from "src/domain/entities";
-import { IRepository } from "./IRepository";
+import { IRepository } from "./repository.interface";
 
 export interface IUserRepository extends IRepository<User> {
     signup: (entity: User) => User;

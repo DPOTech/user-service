@@ -1,2 +1,2 @@
-export * from './IService'
-export * from './IUserService'
+export * from './service.interface'
+export * from './user.service.interface'

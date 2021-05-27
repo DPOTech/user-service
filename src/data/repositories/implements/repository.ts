@@ -2,7 +2,7 @@ import { Injectable } from "@nestjs/common";
 import { IRepository } from "../interfaces";
 
 @Injectable()
-export class ApplicationRepository<T> implements IRepository<T>{
+export class Repository<T> implements IRepository<T>{
     constructor(){}
 
     create = (entity: T) => {

@@ -2,11 +2,11 @@ import { Injectable } from "@nestjs/common";
 import { Guid } from "guid-typescript";
 import { IUser, User } from "src/domain/entities";
 import { IUserRepository } from "../interfaces";
-import { ApplicationRepository } from "./application.repository";
+import { Repository } from "./repository";
 
 
 @Injectable()
-export class UserRepository extends ApplicationRepository<User> implements IUserRepository {
+export class UserRepository extends Repository<User> implements IUserRepository {
     constructor() {
         super();
     }

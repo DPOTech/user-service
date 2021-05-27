@@ -1,12 +1,12 @@
-import { Injectable } from "@nestjs/common";
-import { UserRepository } from "src/data/repositories/implements";
-import { IUser, User } from "src/domain/entities";
+import { Inject, Injectable } from "@nestjs/common";
+import { IUserRepository } from "src/data/repositories/interfaces";
+import { User } from "src/domain/entities";
 import { IUserService } from "../interfaces";
-import { ApplicationService } from "./application.service";
+import { Service } from "./service";
 
 @Injectable()
-export class UserService extends ApplicationService<User> implements IUserService {
-    constructor(public repository: UserRepository) {
+export class UserService extends Service<User> implements IUserService {
+    constructor(@Inject('IUserRepository') public repository: IUserRepository) {
         super(repository);
     }
     findByUserName = (userName: string): User => {

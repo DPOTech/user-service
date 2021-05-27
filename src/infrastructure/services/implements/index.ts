@@ -1,2 +1,2 @@
-export * from './application.service'
+export * from './service'
 export * from './user.service'
