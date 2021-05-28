@@ -12,8 +12,12 @@ export class UserController {
     return this.appService.getHello();
   }
   
-  @Post()
+  @Post('signup')
   async signup(@Body() viewModel: UserSignUpViewModel) {
-    return await this.commandBus.execute(new UserSignUpCommand(viewModel.UserName, viewModel.Password));
+    try {
+      return await this.commandBus.execute(new UserSignUpCommand(viewModel.UserName, viewModel.Password));
+    } catch (error) {
+      return error;
+    }
   }
 }

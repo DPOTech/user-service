@@ -1,9 +1,6 @@
 import { AggregateRoot } from '@nestjs/cqrs';
 import { IsNotEmpty, IsString, IsDate } from 'class-validator';
-import { exception } from 'console';
-import { Guid } from 'guid-typescript'
 import { UserSignUpEvent } from '../events';
-import { Md5 } from "md5-typescript";
 import { Prop, Schema } from '@nestjs/mongoose';
 
 export interface IUser {
@@ -18,6 +15,7 @@ export interface IUser {
 
 @Schema()
 export class User extends AggregateRoot implements IUser {
+    
     public constructor(init?:Partial<User>) {
         super();
         Object.assign(this, init);

@@ -8,6 +8,6 @@ export class UserSignUpEventHandler implements IEventHandler<UserSignUpEvent> {
   constructor(@Inject('IUserService') private service: IUserService) {}
 
   handle(event: UserSignUpEvent) {
-      debugger;
+      
   }
 }

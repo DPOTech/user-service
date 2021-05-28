@@ -14,19 +14,18 @@ import { EventSourcingModule } from 'event-sourcing-nestjs';
 @Module({
   imports: [
     CqrsModule,
-    MongooseModule.forRoot('mongodb+srv://minhnd:abcde12345-@cluster0.nfcfl.mongodb.net/users?retryWrites=true&w=majority', {
+    //với mongo atlas thêm ssl=true
+    MongooseModule.forRoot('mongodb+srv://minhnd:abcde12345-@cluster0.nfcfl.mongodb.net/users?retryWrites=true&w=majority&ssl=true', {
       useNewUrlParser: true,
       useCreateIndex: true,
       useUnifiedTopology: true,
-      useFindAndModify: false,
-      reconnectInterval:1000,
-      reconnectTries:10
+      useFindAndModify: false
     }),
     MongooseModule.forFeature([
       { name: User.name, schema: UserSchema }
     ]),
     EventSourcingModule.forRoot({
-      mongoURL: 'mongodb+srv://minhnd:abcde12345-@cluster0.nfcfl.mongodb.net/user?retryWrites=true&w=majority',
+      mongoURL: 'mongodb+srv://minhnd:abcde12345-@cluster0.nfcfl.mongodb.net/eventstore?retryWrites=true&w=majority&ssl=true',
     })
   ],
   controllers: [
