@@ -1,17 +1,19 @@
 import { Body, Controller, Get, Post } from '@nestjs/common';
-import { CommandBus } from '@nestjs/cqrs';
+import { CommandBus, QueryBus } from '@nestjs/cqrs';
+import { EventPattern } from '@nestjs/microservices';
 import { UserSignUpCommand } from 'src/infrastructure/commands';
+import { UserSignInQuery } from 'src/infrastructure/queries';
 import { AppService } from 'src/infrastructure/services/app.service';
-import { UserSignUpViewModel } from 'src/infrastructure/viewmodels';
+import { UserSignInViewModel, UserSignUpViewModel } from 'src/infrastructure/viewmodels';
 @Controller('api/users')
 export class UserController {
-  constructor(private readonly appService: AppService, private readonly commandBus: CommandBus) { }
+  constructor(private readonly appService: AppService, private readonly commandBus: CommandBus, private readonly queryBus: QueryBus) { }
 
   @Get()
   getHello(): string {
     return this.appService.getHello();
   }
-  
+
   @Post('signup')
   async signup(@Body() viewModel: UserSignUpViewModel) {
     try {
@@ -20,4 +22,18 @@ export class UserController {
       return error;
     }
   }
+
+  @Post('signup')
+  async signin(@Body() viewModel: UserSignInViewModel) {
+    try {
+      return await this.queryBus.execute(new UserSignInQuery(viewModel.UserName, viewModel.Password));
+    } catch (error) {
+      return error;
+    }
+  }
+
+  /*@EventPattern('user-signup')
+  async getNotifications(data: Record<string, unknown>) {
+    console.log(data);
+  }*/
 }

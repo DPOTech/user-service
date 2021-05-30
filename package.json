@@ -13,6 +13,7 @@
     "start:dev": "nest start --watch",
     "start:debug": "nest start --debug --watch",
     "start:prod": "node dist/main",
+    "microservice": "nest start --watch --config microservice.json",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
     "test": "jest",
     "test:watch": "jest --watch",
@@ -23,7 +24,10 @@
   "dependencies": {
     "@nestjs/core": "^7.6.15",
     "@nestjs/cqrs": "^7.0.1",
+    "@nestjs/microservices": "^7.6.17",
     "@nestjs/platform-express": "^7.6.15",
+    "amqp-connection-manager": "^3.2.2",
+    "amqplib": "^0.8.0",
     "dotty": "^0.1.1",
     "lodash": "^4.17.21",
     "reflect-metadata": "^0.1.13",

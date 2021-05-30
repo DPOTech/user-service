@@ -10,6 +10,8 @@ import { UserService, Service } from './infrastructure/services/implements';
 import { User } from './domain/entities';
 import { UserSchema } from './schemas';
 import { UserEventStoreService } from './infrastructure/eventstore/implements';
+import { ClientsModule, Transport } from '@nestjs/microservices';
+import { UserConsumerController } from './application/controllers/consumers';
 
 @Module({
   imports: [
@@ -23,11 +25,25 @@ import { UserEventStoreService } from './infrastructure/eventstore/implements';
     }),
     MongooseModule.forFeature([
       { name: User.name, schema: UserSchema }
+    ]),
+    ClientsModule.register([
+      {
+        name: 'USER_SERVICE',
+        transport: Transport.RMQ,
+        options: {
+          urls: ['amqp://administrator:q*@ZbB9cf6za@103.199.18.93:5672'],
+          queue: 'nodejs_queue',
+          queueOptions: {
+            durable: false
+          },
+        },
+      },
     ])
   ],
   controllers: [
     AppController,
-    UserController
+    UserController,
+    UserConsumerController
   ],
   providers: [
     AppService,

@@ -9,7 +9,7 @@ export class UserEventStoreService implements IUserEventStoreService {
     private readonly _client: EventStoreDBClient;
 
     constructor() {
-        this._client = EventStoreDBClient.connectionString("esdb://admin:changeit@96.9.211.102:2113?tls=false");
+        this._client = EventStoreDBClient.connectionString("esdb://admin:changeit@103.199.18.93:2113?tls=false");
     }
 
     readStreamAsync = async (userName: string) => {
