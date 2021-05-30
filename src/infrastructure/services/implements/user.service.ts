@@ -2,7 +2,7 @@ import { Inject, Injectable } from "@nestjs/common";
 import { Guid } from "guid-typescript";
 import { Md5 } from "md5-typescript";
 import { IUserRepository } from "src/data/repositories/interfaces";
-import { IUser, User } from "src/domain/entities";
+import { User } from "src/domain/entities";
 import { IUserService } from "../interfaces";
 import { Service } from "./service";
 

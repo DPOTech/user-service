@@ -1,13 +1,19 @@
 import { Inject } from "@nestjs/common";
 import { EventsHandler, IEventHandler } from "@nestjs/cqrs";
-import { UserSignUpEvent } from "src/domain/events";
-import { IUserService } from "src/infrastructure/services/interfaces";
+import { IUserEventStoreService } from "src/infrastructure/eventstore/interfaces";
+import { JSONEventData, JSONEventType } from "@eventstore/db-client";
+import { UserEventType } from "src/infrastructure/eventstore/types/users";
 
-@EventsHandler(UserSignUpEvent)
-export class UserSignUpEventHandler implements IEventHandler<UserSignUpEvent> {
-  constructor(@Inject('IUserService') private service: IUserService) {}
+@EventsHandler({} as JSONEventData<UserEventType>)
+export class UserSignUpEventHandler implements IEventHandler<JSONEventData<UserEventType>> {
+  constructor(@Inject('IUserEventStoreService') private eventStoreService: IUserEventStoreService) { }
 
-  handle(event: UserSignUpEvent) {
-      
+  async handle(event: JSONEventData<UserEventType>) {
+    let streamName = 'user_' + event.data.UserName;
+    let result = await this.eventStoreService.appendToStreamAsync(streamName, event);
+    if (result.success) {
+      //buid to view
+    }
+    //notify
   }
 }

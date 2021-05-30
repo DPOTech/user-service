@@ -1,7 +1,8 @@
 import { AggregateRoot } from '@nestjs/cqrs';
 import { IsNotEmpty, IsString, IsDate } from 'class-validator';
-import { UserSignUpEvent } from '../events';
 import { Prop, Schema } from '@nestjs/mongoose';
+import { jsonEvent } from '@eventstore/db-client';
+import { UserEventType } from 'src/infrastructure/eventstore/types/users';
 
 export interface IUser {
     Id: string,
@@ -11,6 +12,7 @@ export interface IUser {
     LastName?: string,
     Birthday?: Date,
     signup: (id: string, userName: string, password: string) => void;
+    changeInformation: (id: string, userName: string, password: string) => void;
 }
 
 @Schema()
@@ -49,6 +51,26 @@ export class User extends AggregateRoot implements IUser {
     Birthday?: Date;
 
     signup = (id: string, userName: string, password: string) => {
-        this.apply(new UserSignUpEvent(id, userName, password));
+        let event = jsonEvent<UserEventType>({
+            type: 'user-signup',
+            data: {
+                Id: id,
+                UserName: userName,
+                Password: password
+            }
+        })
+        this.apply(event);
+    };
+
+    changeInformation = (id: string, userName: string, password: string) => {
+        let event = jsonEvent<UserEventType>({
+            type: 'user-change-infomation',
+            data: {
+                Id: id,
+                UserName: userName,
+                Password: password
+            }
+        })
+        this.apply(event);
     };
 }

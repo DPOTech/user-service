@@ -9,13 +9,13 @@ import { UserRepository, Repository } from './data/repositories/implements'
 import { UserService, Service } from './infrastructure/services/implements';
 import { User } from './domain/entities';
 import { UserSchema } from './schemas';
-import { EventSourcingModule } from 'event-sourcing-nestjs';
+import { UserEventStoreService } from './infrastructure/eventstore/implements';
 
 @Module({
   imports: [
     CqrsModule,
     //với mongo atlas thêm ssl=true
-    MongooseModule.forRoot('mongodb+srv://minhnd:abcde12345-@cluster0.nfcfl.mongodb.net/users?retryWrites=true&w=majority&ssl=true', {
+    MongooseModule.forRoot('mongodb+srv://minhnd:abcde12345-@cluster0.nfcfl.mongodb.net/users?retryWrites=true&w=majority', {
       useNewUrlParser: true,
       useCreateIndex: true,
       useUnifiedTopology: true,
@@ -23,10 +23,7 @@ import { EventSourcingModule } from 'event-sourcing-nestjs';
     }),
     MongooseModule.forFeature([
       { name: User.name, schema: UserSchema }
-    ]),
-    EventSourcingModule.forRoot({
-      mongoURL: 'mongodb+srv://minhnd:abcde12345-@cluster0.nfcfl.mongodb.net/eventstore?retryWrites=true&w=majority&ssl=true',
-    })
+    ])
   ],
   controllers: [
     AppController,
@@ -39,7 +36,8 @@ import { EventSourcingModule } from 'event-sourcing-nestjs';
     { provide: 'IRepository', useClass: Repository },
     { provide: 'IUserRepository', useClass: UserRepository },
     { provide: 'IService', useClass: Service },
-    { provide: 'IUserService', useClass: UserService }
+    { provide: 'IUserService', useClass: UserService },
+    { provide: 'IUserEventStoreService', useClass: UserEventStoreService }
   ],
 })
 export class AppModule { }

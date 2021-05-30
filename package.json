@@ -31,6 +31,7 @@
     "rxjs": "^6.6.6"
   },
   "devDependencies": {
+    "@eventstore/db-client": "^1.2.1",
     "@nestjs/cli": "^7.6.0",
     "@nestjs/common": "^7.6.17",
     "@nestjs/mongoose": "^7.2.4",
@@ -46,7 +47,6 @@
     "eslint": "^7.22.0",
     "eslint-config-prettier": "^8.1.0",
     "eslint-plugin-prettier": "^3.3.1",
-    "event-sourcing-nestjs": "^1.1.4",
     "guid-typescript": "^1.0.9",
     "jest": "^26.6.3",
     "md5-typescript": "^1.0.5",
