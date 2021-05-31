@@ -1,4 +1,4 @@
-import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
+import { CacheModule, MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { AppController, UserController } from 'src/application/controllers';
 import { AppService } from './infrastructure/services/app.service';
 import { CqrsModule } from '@nestjs/cqrs';
@@ -14,6 +14,9 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { join } from 'path';
 import { User } from './domain/entities';
 import { OdataUsersMiddleware } from './infrastructure/middlewares';
+import { GraphQLModule } from '@nestjs/graphql';
+import { UsersResolver } from './infrastructure/resolvers/user.resolver';
+import * as redisStore from 'cache-manager-redis-store';
 
 @Module({
   imports: [
@@ -30,6 +33,9 @@ import { OdataUsersMiddleware } from './infrastructure/middlewares';
       useUnifiedTopology: true
     }),
     TypeOrmModule.forFeature([User]),
+    GraphQLModule.forRoot({
+      autoSchemaFile: true,    
+    }),
     ClientsModule.register([
       {
         name: 'USER_SERVICE',
@@ -43,6 +49,11 @@ import { OdataUsersMiddleware } from './infrastructure/middlewares';
         },
       },
     ]),
+    CacheModule.register({
+      store: redisStore,
+      host: '103.199.18.93',
+      port: 6379,
+    }),
     JwtModule.register({
       secret: 'nmLyRD=&=dKhNg3v'
     })
@@ -57,6 +68,7 @@ import { OdataUsersMiddleware } from './infrastructure/middlewares';
     UserSignUpCommandHandler,
     UserSignUpEventHandler,
     UserSignInQueryHandler,
+    UsersResolver,
     { provide: 'IUserService', useClass: UserService },
     { provide: 'IUserEventStoreService', useClass: UserEventStoreService }
   ],

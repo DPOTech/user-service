@@ -3,6 +3,7 @@ import { IsNotEmpty, IsString, IsDate } from 'class-validator';
 import { jsonEvent } from '@eventstore/db-client';
 import { UserEventType } from 'src/infrastructure/eventstore/types/users';
 import { Column, Entity, ObjectID, ObjectIdColumn } from 'typeorm';
+import { Field, ObjectType } from '@nestjs/graphql';
 
 export interface IUser {
     Id: string,
@@ -15,6 +16,7 @@ export interface IUser {
     changeInformation: (id: string, userName: string, password: string) => void;
 }
 
+@ObjectType()
 @Entity()
 export class User extends AggregateRoot implements IUser {
 
@@ -25,29 +27,35 @@ export class User extends AggregateRoot implements IUser {
 
     @ObjectIdColumn() id: ObjectID;
 
+    @Field()
     @Column()
     @IsNotEmpty()
     @IsString()
     Id: string;
 
+    @Field()
     @Column()
     @IsNotEmpty()
     @IsString()
     UserName: string;
 
+    @Field()
     @Column()
     @IsNotEmpty()
     @IsString()
     Password: string;
 
+    @Field()
     @Column()
     @IsString()
     FirstName?: string;
 
+    @Field()
     @Column()
     @IsString()
     LastName?: string;
 
+    @Field()
     @Column()
     @IsDate()
     Birthday?: Date;
