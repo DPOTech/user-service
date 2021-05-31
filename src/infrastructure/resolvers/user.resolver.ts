@@ -1,6 +1,7 @@
 import { CACHE_MANAGER, Inject } from '@nestjs/common';
-import { Resolver, Query, Mutation, Args } from '@nestjs/graphql';
+import { Resolver, Query } from '@nestjs/graphql';
 import { InjectRepository } from '@nestjs/typeorm';
+import { Cache } from 'cache-manager';
 import { User } from 'src/domain/entities';
 import { MongoRepository } from 'typeorm';
 
@@ -11,7 +12,6 @@ export class UsersResolver {
 
     @Query(returns => [User])
     async users(): Promise<User[]> {
-        
         return await this.repository.find();
     }
 }
