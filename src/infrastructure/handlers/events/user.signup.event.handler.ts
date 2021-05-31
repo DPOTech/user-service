@@ -19,7 +19,7 @@ export class UserSignUpEventHandler implements IEventHandler<JSONEventData<UserE
       switch (event.type) {
         case "user-signup":
           //buid to view
-          this._service.signup(event.data.Id, event.data.UserName, event.data.Password);
+          await this._service.signup(event.data.Id, event.data.UserName, event.data.Password);
           //notify
           this.client.emit('user-signup', { Id: event.data.Id, UserName: event.data.UserName });
           break;

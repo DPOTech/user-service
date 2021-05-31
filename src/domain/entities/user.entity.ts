@@ -1,8 +1,8 @@
 import { AggregateRoot } from '@nestjs/cqrs';
 import { IsNotEmpty, IsString, IsDate } from 'class-validator';
-import { Prop, Schema } from '@nestjs/mongoose';
 import { jsonEvent } from '@eventstore/db-client';
 import { UserEventType } from 'src/infrastructure/eventstore/types/users';
+import { Column, Entity, ObjectID, ObjectIdColumn } from 'typeorm';
 
 export interface IUser {
     Id: string,
@@ -15,38 +15,40 @@ export interface IUser {
     changeInformation: (id: string, userName: string, password: string) => void;
 }
 
-@Schema()
+@Entity({ name: 'Users' })
 export class User extends AggregateRoot implements IUser {
-    
-    public constructor(init?:Partial<User>) {
+
+    public constructor(init?: Partial<User>) {
         super();
         Object.assign(this, init);
     }
 
-    @Prop()
+    @ObjectIdColumn() id: ObjectID;
+
+    @Column()
     @IsNotEmpty()
     @IsString()
     Id: string;
 
-    @Prop()
+    @Column()
     @IsNotEmpty()
     @IsString()
     UserName: string;
 
-    @Prop()
+    @Column()
     @IsNotEmpty()
     @IsString()
     Password: string;
 
-    @Prop()
+    @Column()
     @IsString()
     FirstName?: string;
 
-    @Prop()
+    @Column()
     @IsString()
     LastName?: string;
 
-    @Prop()
+    @Column()
     @IsDate()
     Birthday?: Date;
 

@@ -1,34 +1,34 @@
 import { Module } from '@nestjs/common';
 import { AppController, UserController } from 'src/application/controllers';
 import { AppService } from './infrastructure/services/app.service';
-import { MongooseModule } from '@nestjs/mongoose';
 import { CqrsModule } from '@nestjs/cqrs';
 import { UserSignUpCommandHandler } from './infrastructure/handlers/commands'
 import { UserSignUpEventHandler } from './infrastructure/handlers/events'
-import { UserRepository, Repository } from './data/repositories/implements'
-import { UserService, Service } from './infrastructure/services/implements';
-import { User } from './domain/entities';
-import { UserSchema } from './schemas';
+import { UserService } from './infrastructure/services/implements';
 import { UserEventStoreService } from './infrastructure/eventstore/implements';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 import { UserConsumerController } from './application/controllers/consumers';
 import { JwtModule } from '@nestjs/jwt';
-import { UserSignInQuery } from './infrastructure/queries';
 import { UserSignInQueryHandler } from './infrastructure/handlers/queries';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { join } from 'path';
+import { User } from './domain/entities';
 
 @Module({
   imports: [
     CqrsModule,
     //với mongo atlas thêm ssl=true
-    MongooseModule.forRoot('mongodb+srv://minhnd:abcde12345-@cluster0.nfcfl.mongodb.net/users?retryWrites=true&w=majority', {
+    TypeOrmModule.forRoot({
+      type: 'mongodb',
+      url:
+        'mongodb+srv://minhnd:abcde12345-@cluster0.nfcfl.mongodb.net/users?retryWrites=true&w=majority&ssl=true',
+      entities: [join(__dirname, '**/**.entity{.ts,.js}')],
+      synchronize: true,
       useNewUrlParser: true,
-      useCreateIndex: true,
-      useUnifiedTopology: true,
-      useFindAndModify: false
+      logging: true,
+      useUnifiedTopology:true
     }),
-    MongooseModule.forFeature([
-      { name: User.name, schema: UserSchema }
-    ]),
+    TypeOrmModule.forFeature([User]),
     ClientsModule.register([
       {
         name: 'USER_SERVICE',
@@ -56,9 +56,6 @@ import { UserSignInQueryHandler } from './infrastructure/handlers/queries';
     UserSignUpCommandHandler,
     UserSignUpEventHandler,
     UserSignInQueryHandler,
-    { provide: 'IRepository', useClass: Repository },
-    { provide: 'IUserRepository', useClass: UserRepository },
-    { provide: 'IService', useClass: Service },
     { provide: 'IUserService', useClass: UserService },
     { provide: 'IUserEventStoreService', useClass: UserEventStoreService }
   ],

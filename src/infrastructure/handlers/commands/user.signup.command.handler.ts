@@ -22,6 +22,5 @@ export class UserSignUpCommandHandler implements ICommandHandler<UserSignUpComma
         let user = this.publisher.mergeObjectContext(new User());
         user.signup(id, command.userName, hashPassword);
         user.commit();
-        return new Message({ IsSuccess: true, Payload: { Id: user.Id, UserName: user.UserName } });
     }
 }
