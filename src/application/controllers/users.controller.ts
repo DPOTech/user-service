@@ -1,6 +1,5 @@
 import { Body, Controller, Get, Post } from '@nestjs/common';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
-import { EventPattern } from '@nestjs/microservices';
 import { UserSignUpCommand } from 'src/infrastructure/commands';
 import { UserSignInQuery } from 'src/infrastructure/queries';
 import { AppService } from 'src/infrastructure/services/app.service';
@@ -31,9 +30,4 @@ export class UserController {
       return error;
     }
   }
-
-  /*@EventPattern('user-signup')
-  async getNotifications(data: Record<string, unknown>) {
-    console.log(data);
-  }*/
 }

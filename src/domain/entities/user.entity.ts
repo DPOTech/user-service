@@ -15,7 +15,7 @@ export interface IUser {
     changeInformation: (id: string, userName: string, password: string) => void;
 }
 
-@Entity({ name: 'Users' })
+@Entity()
 export class User extends AggregateRoot implements IUser {
 
     public constructor(init?: Partial<User>) {
