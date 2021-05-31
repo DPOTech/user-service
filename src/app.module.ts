@@ -12,6 +12,9 @@ import { UserSchema } from './schemas';
 import { UserEventStoreService } from './infrastructure/eventstore/implements';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 import { UserConsumerController } from './application/controllers/consumers';
+import { JwtModule } from '@nestjs/jwt';
+import { UserSignInQuery } from './infrastructure/queries';
+import { UserSignInQueryHandler } from './infrastructure/handlers/queries';
 
 @Module({
   imports: [
@@ -38,7 +41,10 @@ import { UserConsumerController } from './application/controllers/consumers';
           },
         },
       },
-    ])
+    ]),
+    JwtModule.register({
+      secret: 'nmLyRD=&=dKhNg3v'
+    })
   ],
   controllers: [
     AppController,
@@ -49,6 +55,7 @@ import { UserConsumerController } from './application/controllers/consumers';
     AppService,
     UserSignUpCommandHandler,
     UserSignUpEventHandler,
+    UserSignInQueryHandler,
     { provide: 'IRepository', useClass: Repository },
     { provide: 'IUserRepository', useClass: UserRepository },
     { provide: 'IService', useClass: Service },

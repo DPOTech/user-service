@@ -12,13 +12,11 @@ export class UserService extends Service<User> implements IUserService {
         super(repository);
     }
 
-    signup = async (userName: string, password: string): Promise<User> => {
+    signup = async (id: string, userName: string, password: string): Promise<User> => {
         var existedUser = await this.findByUserNameAsync(userName);
         if (existedUser)
             return existedUser;
-        let id = Guid.create().toString();
-        let hashPassword = Md5.init(password);
-        let user = { Id: id, UserName: userName, Password: hashPassword };
+        let user = { Id: id, UserName: userName, Password: password };
         let result = new User(user);
         return await this.repository.signup(result);
     }

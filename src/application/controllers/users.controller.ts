@@ -23,7 +23,7 @@ export class UserController {
     }
   }
 
-  @Post('signup')
+  @Post('signin')
   async signin(@Body() viewModel: UserSignInViewModel) {
     try {
       return await this.queryBus.execute(new UserSignInQuery(viewModel.UserName, viewModel.Password));
