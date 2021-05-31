@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { AppController, UserController } from 'src/application/controllers';
 import { AppService } from './infrastructure/services/app.service';
 import { CqrsModule } from '@nestjs/cqrs';
@@ -13,6 +13,7 @@ import { UserSignInQueryHandler } from './infrastructure/handlers/queries';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { join } from 'path';
 import { User } from './domain/entities';
+import { OdataUsersMiddleware } from './infrastructure/middlewares';
 
 @Module({
   imports: [
@@ -26,7 +27,7 @@ import { User } from './domain/entities';
       synchronize: true,
       useNewUrlParser: true,
       logging: true,
-      useUnifiedTopology:true
+      useUnifiedTopology: true
     }),
     TypeOrmModule.forFeature([User]),
     ClientsModule.register([
@@ -60,4 +61,8 @@ import { User } from './domain/entities';
     { provide: 'IUserEventStoreService', useClass: UserEventStoreService }
   ],
 })
-export class AppModule { }
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(OdataUsersMiddleware).forRoutes('api/v1/odata/users');
+  }
+}
